@@ -1,0 +1,30 @@
+{
+  "name": "holdem-math-lab",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Educational Texas Hold'em PWA: probability, expected value and game theory with simulated chips only.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit",
+    "gen:preflop": "node --experimental-strip-types scripts/gen-preflop-equity.ts"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "vitest": "^4.0.0",
+    "typescript": "~5.9.2",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/node": "^22.0.0",
+    "vite-plugin-pwa": "^1.0.3"
+  }
+}
