@@ -7,7 +7,7 @@ import type { StrategyProfile } from './game';
  * Only a StrategySource whose provenance is `solver` — produced by a converged CFR run with a
  * reported exploitability — may be shown to learners as "GTO". Everything else is a heuristic.
  *
- * Future work (see PLAN.md, Phase 3): a Hold'em river-subgame solver will implement
+ * Future work (see ROADMAP.md, Phase 4): a Hold'em river-subgame solver will implement
  * `ExtensiveGame`, run `solveCfr`, and expose its result through this interface; a bot adapter
  * will map a PlayerView to an info-set key and sample an action from `policy`.
  */

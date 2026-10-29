@@ -56,7 +56,7 @@ Rules implemented by the engine include heads-up blind order, minimum bet and ra
 4. Write a `Strategy` adapter in `src/bots/` that maps a `PlayerView` to an info-set key and samples from `policy()`.
    Because the provenance is `solver`, the UI will label it as solver-derived automatically.
 
-See [PLAN.md](PLAN.md) for the full phased roadmap.
+See [ROADMAP.md](ROADMAP.md) for the phased roadmap, including what is done and the plan for iOS.
 
 ## Verification highlights
 
