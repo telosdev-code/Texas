@@ -13,6 +13,8 @@ npm run build        # type-check + production build + service worker
 npm run preview      # serve the production build (test offline mode here)
 ```
 
+**iOS app:** the same code is packaged with Capacitor. On a Mac with Xcode run `npm run ios:sync` then `npm run ios:open`. See [docs/ios.md](docs/ios.md).
+
 ## Features
 
 | Tab | What it does |

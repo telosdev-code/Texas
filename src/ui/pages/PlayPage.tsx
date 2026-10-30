@@ -6,6 +6,7 @@ import type { EquityResult } from '../../core/equity';
 import { fullRange, rangeToCombos } from '../../core/ranges';
 import { legalActions, positionLabels, potTotal } from '../../engine/engine';
 import type { Action, HandState, LogEntry } from '../../engine/types';
+import { haptics } from '../../platform/native';
 import { compute } from '../../workers/client';
 import { CardView } from '../components/CardView';
 import { ProvenanceBadge } from '../components/ProvenanceBadge';
@@ -26,7 +27,13 @@ export function PlayPage() {
         <Table hand={hand} seats={session.seats} showBotCards={settings.showBotCards} />
         <div className="under-table">
           {hand && !hand.complete && hand.toAct === HUMAN_SEAT ? (
-            <ActionBar hand={hand} onAct={act} />
+            <ActionBar
+              hand={hand}
+              onAct={(a) => {
+                haptics.tap();
+                act(a);
+              }}
+            />
           ) : (
             <div className="deal-bar">
               {hand?.complete && <ResultLine hand={hand} />}

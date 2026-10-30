@@ -6,6 +6,7 @@ import { applyAction, nextButton, startHand } from '../engine/engine';
 import type { Action, HandState, SeatInfo } from '../engine/types';
 import type { StoredHand } from '../review/analysis';
 import { KEYS, load, save } from '../storage/storage';
+import { haptics } from '../platform/native';
 import { compute } from '../workers/client';
 import { useStore, type TableSettings } from './store';
 
@@ -120,6 +121,7 @@ export function useGame() {
       descriptions: hand.result!.descriptions,
     };
     addHand(stored);
+    if (humanActed && hand.result!.net[HUMAN_SEAT] > 0) haptics.success();
     if (settings.autoReview && humanActed) compute.review(stored).then((r) => setReview(stored.id, r)).catch(() => {});
   }, [hand, addHand, setReview, settings.autoReview]);
 

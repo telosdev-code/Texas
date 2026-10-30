@@ -34,6 +34,8 @@ interface Store {
   drills: DrillRecord[];
   addDrill: (d: DrillRecord) => void;
   clearDrills: () => void;
+  /** Replace all hands and trainer results (used by backup import). */
+  replaceHistory: (hands: StoredHand[], drills: DrillRecord[]) => void;
 }
 
 const Ctx = createContext<Store | null>(null);
@@ -65,6 +67,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       drills,
       addDrill,
       clearDrills: () => setDrills([]),
+      replaceHistory: (h: StoredHand[], d: DrillRecord[]) => {
+        setHands(h);
+        setDrills(d);
+      },
     }),
     [settings, hands, drills, addHand, setReview, addDrill],
   );
