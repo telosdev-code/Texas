@@ -32,6 +32,14 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+body { overscroll-behavior: none; }
+/* No double-tap zoom on controls (keeps taps instant on iOS). */
+button, a, input, select, label, .cell, .seat { touch-action: manipulation; }
+/* Inside the iOS app, follow the system text size (Dynamic Type); the layout is rem-based. */
+html.native-ios { font: -apple-system-body; }
+html.native-ios body { font-family: Inter, system-ui, -apple-system, sans-serif; }
+html.native .felt, html.native .board, html.native .seat { -webkit-user-select: none; user-select: none; }
 body { min-height: 100dvh; }
 h2, h3, h4 { margin: 0 0 0.4em; line-height: 1.2; }
 h2 { font-size: 1.5rem; }
@@ -261,6 +269,7 @@ input[type='range'] { accent-color: var(--accent); width: 100%; }
 
 /* ---------- range matrix ---------- */
 .ranges-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.matrix .cell { touch-action: none; }
 .matrix { display: grid; grid-template-columns: repeat(13, 1fr); gap: 2px; touch-action: none; user-select: none; -webkit-user-select: none; margin-bottom: 10px; }
 .cell {
   aspect-ratio: 1; border: 0; border-radius: 3px; font-size: clamp(0.5rem, 1.25vw, 0.78rem); font-weight: 600; padding: 0; cursor: pointer;

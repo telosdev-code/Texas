@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { PREFLOP_EQUITY_VS_RANDOM } from '../../core/data/preflopEquity';
 import { PREFLOP_RANKING_PROVENANCE, RANGE_PRESETS, topPercentRange } from '../../core/presets';
 import { countCombos, emptyRange, formatRange, HAND_CLASSES, parseRange, rangePercent, type Range } from '../../core/ranges';
-import { load, save } from '../../storage/storage';
+import { KEYS, load, save } from '../../storage/storage';
 import { ProvenanceBadge } from '../components/ProvenanceBadge';
 import { RangeMatrix } from '../components/RangeMatrix';
 import { num, pct } from '../format';
@@ -10,7 +10,7 @@ import { num, pct } from '../format';
 export function RangesPage() {
   const [range, setRange] = useState<Range>(() => {
     try {
-      return parseRange(load('ranges.current', RANGE_PRESETS[1].text));
+      return parseRange(load(KEYS.ranges, RANGE_PRESETS[1].text));
     } catch {
       return emptyRange();
     }
@@ -27,7 +27,7 @@ export function RangesPage() {
     const t = formatRange(range);
     if (!editingText.current) setText(t);
     editingText.current = false;
-    save('ranges.current', t);
+    save(KEYS.ranges, t);
   }, [range]);
 
   const preset = RANGE_PRESETS.find((p) => p.id === presetId);

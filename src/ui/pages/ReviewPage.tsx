@@ -1,7 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { REVIEW_PROVENANCE, type StoredHand, type Verdict } from '../../review/analysis';
 import { drillStats, handStats, rolling } from '../../review/progress';
 import { DRILL_INFO, type DrillKind } from '../../trainer/drills';
+import { shareTextFile } from '../../platform/native';
+import { backupFileName, createBackup, mergeBackup, parseBackup } from '../../storage/backup';
+import { MAX_STORED_DRILLS, MAX_STORED_HANDS } from '../../storage/storage';
 import { compute } from '../../workers/client';
 import { CardRow } from '../components/CardView';
 import { LineChart } from '../components/LineChart';
@@ -255,6 +258,66 @@ function Progress() {
         <LineChart points={hs.netTrend.map((p) => ({ x: p.index, y: p.value }))} yFormat={(v) => v.toFixed(0)} xLabel="hand" ariaLabel="Cumulative net big blinds" refLine={{ y: 0, label: 'break-even' }} />
         <p className="muted small">Short-term results are dominated by luck; the mistake rate is the better measure of improvement.</p>
       </section>
+
+      <DataBackup />
     </div>
+  );
+}
+
+function DataBackup() {
+  const { hands, drills, replaceHistory } = useStore();
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const exportData = async () => {
+    const b = createBackup(hands, drills);
+    try {
+      await shareTextFile(backupFileName(b), JSON.stringify(b));
+      setMessage({ ok: true, text: `Exported ${hands.length} hands and ${drills.length} trainer results.` });
+    } catch (e) {
+      // Cancelling the share sheet also lands here.
+      setMessage({ ok: false, text: `Export did not complete: ${(e as Error).message}` });
+    }
+  };
+
+  const importData = async (file: File) => {
+    try {
+      const b = parseBackup(await file.text());
+      const merged = mergeBackup(hands, drills, b, { hands: MAX_STORED_HANDS, drills: MAX_STORED_DRILLS });
+      replaceHistory(merged.hands, merged.drills);
+      setMessage({ ok: true, text: `Imported ${merged.addedHands} new hands and ${merged.addedDrills} new trainer results.` });
+    } catch (e) {
+      setMessage({ ok: false, text: (e as Error).message });
+    }
+  };
+
+  return (
+    <section className="panel">
+      <h3>Your data</h3>
+      <p className="muted small">
+        Everything is stored only on this device. Export a backup to keep it safe or move it to another device; importing merges it
+        with what is already here.
+      </p>
+      <div className="row gap wrap">
+        <button className="btn" onClick={exportData} disabled={!hands.length && !drills.length}>
+          Export backup
+        </button>
+        <button className="btn" onClick={() => fileInput.current?.click()}>
+          Import backup
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="application/json,.json"
+          hidden
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) void importData(f);
+            e.target.value = '';
+          }}
+        />
+      </div>
+      {message && <p className={`small ${message.ok ? 'pos' : 'neg'}`} role="status">{message.text}</p>}
+    </section>
   );
 }

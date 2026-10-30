@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { randomSeed } from '../../core/rng';
 import { DRILL_INFO, gradeDrill, type Drill, type DrillKind, type Grade } from '../../trainer/drills';
+import { haptics } from '../../platform/native';
 import { compute } from '../../workers/client';
 import { CardRow } from '../components/CardView';
 import { ProvenanceBadge } from '../components/ProvenanceBadge';
@@ -37,6 +38,8 @@ export function TrainerPage() {
     if (!drill || grade) return;
     const g = gradeDrill(drill, answer);
     setGrade(g);
+    if (g.correct) haptics.success();
+    else haptics.warning();
     setSessionScore((s) => ({ right: s.right + (g.correct ? 1 : 0), total: s.total + 1 }));
     addDrill({ kind: drill.kind, timestamp: Date.now(), correct: g.correct, score: g.score, evLoss: g.evLoss });
   };
