@@ -13,7 +13,17 @@ import type { Action, HandState, LegalActions, PlayerState, SeatInfo, Street, Ta
  *  - uncalled bets are returned; main pot + side pots; odd chips go clockwise from the button
  */
 
-const clone = <T>(x: T): T => structuredClone(x);
+/**
+ * Copy exactly the parts of a state that transitions mutate (players, board, log). The deck is never
+ * mutated after the shuffle and log entries are never edited, so they are shared. Avoids
+ * structuredClone, which not every JavaScript engine (e.g. older Hermes) provides.
+ */
+const clone = (s: HandState): HandState => ({
+  ...s,
+  players: s.players.map((p) => ({ ...p, hole: [...p.hole] })),
+  board: [...s.board],
+  log: [...s.log],
+});
 
 export const potTotal = (s: HandState) => s.players.reduce((a, p) => a + p.totalBet, 0);
 const isLive = (p: PlayerState) => !p.out && !p.folded;

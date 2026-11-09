@@ -116,7 +116,8 @@ export function contributionsBefore(log: LogEntry[], upTo: number, n: number): n
   return c;
 }
 
-export function reviewHand(h: StoredHand, samples = 6000): HandReview {
+/** `maxExactEvaluations` caps exact enumeration per decision; slower runtimes (React Native/Hermes) pass less. */
+export function reviewHand(h: StoredHand, samples = 6000, maxExactEvaluations = 1_500_000): HandReview {
   const decisions: DecisionReview[] = [];
   const bb = h.config.bigBlind;
   const bbSeat = (h.log.find((e) => e.kind === 'blind' && e.blind === 'BB') as { player: number } | undefined)?.player ?? -1;
@@ -142,7 +143,7 @@ export function reviewHand(h: StoredHand, samples = 6000): HandReview {
       { kind: 'hand', cards: hero },
       ...opponents.map((o) => ({ kind: 'range' as const, combos: rangeToCombos(topPercentRange(o.fraction), dead) })),
     ];
-    const eq = computeEquity({ players, board, samples, seed: h.seed ^ idx, maxExactEvaluations: 1_500_000 });
+    const eq = computeEquity({ players, board, samples, seed: h.seed ^ idx, maxExactEvaluations });
     // Calling all-in for less than the bet can only win the matched part of each opponent's chips.
     const toCall = Math.min(e.toCall, e.stackBefore);
     const pot = winnablePot(contributionsBefore(h.log, idx, h.players.length), h.humanSeat, toCall);

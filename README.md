@@ -13,6 +13,8 @@ npm run build        # type-check + production build + service worker
 npm run preview      # serve the production build (test offline mode here)
 ```
 
+**Native app (React Native / Expo):** see [mobile/README.md](mobile/README.md). It reuses the shared logic in `src/` unchanged.
+
 ## Features
 
 | Tab | What it does |

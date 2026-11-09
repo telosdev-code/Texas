@@ -1,0 +1,26 @@
+name: Mobile
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    env:
+      EXPO_NO_TELEMETRY: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+        working-directory: mobile
+      - run: npx tsc --noEmit
+        working-directory: mobile
+      - name: Build the iOS JavaScript bundle
+        run: npx expo export --platform ios --output-dir /tmp/expo-ios
+        working-directory: mobile

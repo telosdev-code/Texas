@@ -17,5 +17,6 @@
     "allowImportingTsExtensions": true,
     "types": ["vite/client", "vite-plugin-pwa/client"]
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests"],
+  "exclude": ["src/**/*.native.ts", "src/**/*.native.tsx"]
 }

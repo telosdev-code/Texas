@@ -149,6 +149,22 @@ describe('side pots', () => {
   });
 });
 
+describe('immutability', () => {
+  it('applyAction never mutates the state it is given', () => {
+    const rng = createRng(99);
+    let s = startHand(seats(500, 800, 300, 1000), 1, cfg, 123);
+    while (!s.complete) {
+      const before = JSON.stringify(s);
+      const l = legalActions(s);
+      const a: Action = l.canCall && rng.next() < 0.6 ? { type: 'call' } : l.canCheck ? { type: 'check' } : l.canRaise ? { type: 'raise', amount: l.maxRaiseTo } : { type: 'fold' };
+      const next = applyAction(s, a);
+      expect(JSON.stringify(s)).toBe(before);
+      expect(next).not.toBe(s);
+      s = next;
+    }
+  });
+});
+
 describe('random play invariants', () => {
   it('conserves chips and only ever reaches legal states over many random hands', () => {
     const rng = createRng(2024);

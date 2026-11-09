@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Hold'em Math Lab",
+    "slug": "holdem-math-lab",
+    "version": "0.1.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "scheme": "holdemmathlab",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0b1512",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "dev.telos.holdemmathlab",
+      "config": { "usesNonExemptEncryption": false }
+    },
+    "android": {
+      "package": "dev.telos.holdemmathlab",
+      "adaptiveIcon": {
+        "backgroundColor": "#0f3d2e",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#0b1512"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
