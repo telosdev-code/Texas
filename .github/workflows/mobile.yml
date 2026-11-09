@@ -19,7 +19,7 @@ jobs:
           cache-dependency-path: mobile/package-lock.json
       - run: npm ci
         working-directory: mobile
-      - run: npx tsc --noEmit
+      - run: npm run typecheck
         working-directory: mobile
       - name: Build the iOS JavaScript bundle
         run: npx expo export --platform ios --output-dir /tmp/expo-ios
