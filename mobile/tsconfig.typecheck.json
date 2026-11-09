@@ -1,0 +1,14 @@
+{
+  // Type-check only (not read by Metro). Shared files in ../src must resolve React's types from this
+  // app's node_modules; mapping "react" in tsconfig.json would also redirect Metro's runtime imports.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shared/*": ["../src/*"],
+      "@react-native-async-storage/async-storage": ["./node_modules/@react-native-async-storage/async-storage"],
+      "react": ["./node_modules/@types/react"],
+      "react/*": ["./node_modules/@types/react/*"]
+    }
+  }
+}
